@@ -30,7 +30,7 @@ export const Chat = (props) => {
     await addDoc(messagesRef, {
       text: newMessage,
       createdAt: serverTimestamp(),
-      user: auth.currentUser.displayName,
+      user: `Anonymous:${auth.currentUser.uid.slice(0,4)}`,
       room,
     });
 
@@ -43,8 +43,7 @@ export const Chat = (props) => {
       <div className="messages"> 
         {messages.map((message) =>(
           <div className="message" key={message.id}>
-            {console.log(message.user)}
-            <span className="user">{message.user ? message.user : `Anonymous`} </span>
+            <span className="user">{message.user} </span>
             {message.text}
           </div>
         ))}

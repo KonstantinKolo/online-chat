@@ -23,7 +23,6 @@ export const Auth = (props) => {
       // User is signed in, see docs for a list of available properties
       // https://firebase.google.com/docs/reference/js/auth.user
       // const uid = user.uid;
-      console.log(user)
       cookies.set("auth-token", user.refreshToken);
     } else {
       console.log('signed out');
