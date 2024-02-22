@@ -69,8 +69,13 @@ export const Chat = (props) => {
       <div className="gap-element-row"></div>
 
       <div className="users-list">
-        <div>Husein L</div>
-        <div>Konse</div>
+        <div className="user-welcome-text">
+          <p className="user-wel-p">Users in this chat:</p>
+        </div>
+        <div className="user-names">
+          <div>Husein L</div>
+          <div>sassssssssssssssss</div>
+        </div>
       </div>
     </div>
   );
