@@ -17,6 +17,7 @@ export const Chat = (props) => {
       snapshot.forEach((doc) => {
         messages.push({...doc.data(), id: doc.id });
       });
+      messages.reverse();
       setMessages(messages);
     });
 
@@ -30,7 +31,7 @@ export const Chat = (props) => {
     await addDoc(messagesRef, {
       text: newMessage,
       createdAt: serverTimestamp(),
-      user: `Anonymous:${auth.currentUser.uid.slice(0,4)}`,
+      user: `Anonymous(${auth.currentUser.uid.slice(0,4)})`,
       room,
     });
 
@@ -39,24 +40,38 @@ export const Chat = (props) => {
 
   return (
     <div className="chat-app">
-      <div className="header"> <h1>Welcome to {room.toUpperCase()}!</h1></div>
-      <div className="messages"> 
-        {messages.map((message) =>(
-          <div className="message" key={message.id}>
-            <span className="user">{message.user} </span>
-            {message.text}
-          </div>
-        ))}
+      <div className="message-display">
+        <div className="header"> <p className="welcome-text">Welcome to {room.toUpperCase()}!</p></div>
+        <div className="messages"> 
+          {messages.map((message) =>(
+            <div className="message" key={message.id}>
+              <span className="user">{message.user + ':'} </span>
+              {message.text}
+            </div>
+          ))}
+        </div>
       </div>
-      <form onSubmit={handleSubmit} className="new-message-form">
-        <input 
+
+      <div className="message-write">
+        <div className="message-write-welcome">Message to send:</div>
+        <form onSubmit={handleSubmit} className="new-message-form">
+          <textarea
           className="new-message-input" 
           placeholder="Type your message here..."
           onChange={(e) => setNewMessage(e.target.value)}
-          value={newMessage}
-        />
-        <button type="submit" className="send-button">Send</button>
-      </form>
+          value={newMessage}></textarea>
+
+          <button type="submit" className="send-button">Send Message</button>
+        </form>
+      </div>
+
+      <div className="gap-element-col"></div>
+      <div className="gap-element-row"></div>
+
+      <div className="users-list">
+        <div>Husein L</div>
+        <div>Konse</div>
+      </div>
     </div>
   );
 }
