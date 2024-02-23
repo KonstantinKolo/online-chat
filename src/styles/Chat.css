@@ -139,8 +139,10 @@
   grid-column: 3 / 4;
   grid-row: 1 / 4;
   background-color: #fcfcfc;
-  border-top: 1px solid black;
-  border-right: 3px solid #fcfcfc;
+  /* border-top: 1px solid black; */
+  /* border-right: 3px solid #fcfcfc; */
+  border: 2px solid #68605c;
+  outline: 3px inset #fcfcfc;
   overflow-x: hidden;
 }
 .user-welcome-text{
@@ -164,7 +166,7 @@
   font-family: 'silkscreen';
   font-weight: bold;
   padding: 5px;
-  border-top: 1px solid black;
+  border-top: 2px solid #68605c;
 }
 .user-names * {
   margin-bottom: 6px;
