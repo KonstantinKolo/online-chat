@@ -3,38 +3,47 @@ import { addDoc, collection, serverTimestamp, onSnapshot, query, where, orderBy,
 import { auth, db } from "../firebase-config";
 import '../styles/Chat.css';
 
+let windowClosed = false;
+
 export const Chat = (props) => {
   const {room} = props;
 
   const [newMessage,setNewMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
-  const [userList, setUserList] = useState();
+  const [userList, setUserList] = useState([]);
 
   const messagesRef = collection(db, 'messages');
   const usersRef = collection(db, 'roomUsers');
+  
 
+  const userListFunction = async() => {
+    const q = query(collection(db, "roomUsers"), where("room", "==", room));
+
+    const querySnapshot = await getDocs(q);
+    let users = []
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      users = [...users,doc.data().users]
+    });
+    setUserList(users)
+  }
+  
   let hasRan = false;
   useEffect(() => {
     const queryMessages = query(messagesRef, where('room', '==', room), orderBy('createdAt'));
      const unsuscribe = onSnapshot(queryMessages, (snapshot) => {
       let messages = [];
       snapshot.forEach((doc) => {
+        // console.log(messages)
         messages.push({...doc.data(), id: doc.id });
       });
       messages.reverse();
       setMessages(messages);
     });
 
-    const queryUsers = query(usersRef, where('room', '==', room), orderBy('createdAt'));
-    const userLoad = onSnapshot(queryUsers, (snapshot) => {
-      let users = [];
-      snapshot.forEach((doc) => {
-        users.push({...doc.data(), id: doc.id });
-      });
-      users.reverse();
-      setUserList(users);
-    });
+    userListFunction();
+    // console.log(userList)
 
     const asyncFunc = async() => {
       await addDoc(usersRef, {
@@ -48,7 +57,7 @@ export const Chat = (props) => {
 
     hasRan = true;
 
-    return () => unsuscribe(), userLoad();
+    return () => unsuscribe();
   }, []);
 
   const handleSubmit = async(e) => {
@@ -65,19 +74,46 @@ export const Chat = (props) => {
     setNewMessage("");
   };
 
-  window.onbeforeunload = async function() {
-    const queryUsers = query(collection(db, 'roomUsers'), where('users', '==', `Anonymous(${auth.currentUser.uid.slice(0,4)})`))
-
-    const docSnap = await getDocs(queryUsers);
-    docSnap.forEach((doc) => {
-      console.log(doc.data())
-      deleteDoc(doc.ref);
-    });
-
+  window.onbeforeunload = async function(event) {
+    await deleteUser();
+    windowClosed = true;
+    
     console.log('closing');
 
-    return ;
+    return;
   }
+  const deleteUser = async() => {
+    const queryUsers = query(collection(db, 'roomUsers'), where('users', '==', `Anonymous(${auth.currentUser.uid.slice(0,4)})`));
+  
+    const docSnap = await getDocs(queryUsers);
+    docSnap.forEach((doc) => {
+      console.log(doc.data());
+      deleteDoc(doc.ref);
+    });
+  }
+
+  useEffect(() => {
+    // Define your function to be executed periodically
+    const periodicFunction = async() => {
+      // Code goes here
+      if(windowClosed){
+        console.log('Running periodically...');
+        await addDoc(usersRef, {
+          room,
+          users: `Anonymous(${auth.currentUser.uid.slice(0,4)})`,
+          createdAt: serverTimestamp(),
+        });
+        windowClosed = false;
+      }
+      userListFunction();
+    };
+
+    // Set up the interval to run the function every 5 seconds (5000 milliseconds)
+    const intervalId = setInterval(periodicFunction, 5000);
+
+    // Clean up the interval when the component is unmounted or when the dependencies change
+    return () => clearInterval(intervalId);
+  }, []); // Empty dependency array ensures that the effect runs only once on mount
 
   return (
     <div className="chat-app">
@@ -114,11 +150,11 @@ export const Chat = (props) => {
           <p className="user-wel-p">Users in this chat:</p>
         </div>
         <div className="user-names">
-          {/* {userList.map((user) =>(
+          {userList.map((user) =>(
             <div className="user-name-elem" key={user.id}>
-              <span className="user-name">{user.user} </span>
+              <span className="user-name">{user} </span>
             </div>
-          ))} */}
+          ))}
         </div>
       </div>
     </div>
