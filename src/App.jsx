@@ -1,12 +1,13 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import './App.css'
 import { Auth } from './components/Auth'
 
 import Cookies from 'universal-cookie'
 import { Chat } from './components/Chat';
 
+import { addDoc, collection, deleteDoc, doc } from 'firebase/firestore'
 import { signOut } from 'firebase/auth';
-import { auth } from './firebase-config'
+import { auth, db } from './firebase-config'
 
 const cookies = new Cookies();
 
@@ -38,7 +39,7 @@ function App() {
       ) : ( 
       <div className='room'>
         <label className='enter-text'>Enter Room Name:</label>
-        <input className='enter-input' ref={roomInputRef}/>
+        <input className='enter-input' ref={roomInputRef} />
         <button className='enter-button' onClick={()=> setRoom(roomInputRef.current.value)}> Enter Chat</button>
       </div> 
       )}

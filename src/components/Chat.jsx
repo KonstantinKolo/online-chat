@@ -1,15 +1,20 @@
 import { useEffect, useState } from "react";
-import { addDoc, collection, serverTimestamp, onSnapshot, query, where, orderBy } from 'firebase/firestore'
+import { addDoc, collection, serverTimestamp, onSnapshot, query, where, orderBy, deleteDoc, doc, getDoc, getDocs} from 'firebase/firestore'
 import { auth, db } from "../firebase-config";
 import '../styles/Chat.css';
 
 export const Chat = (props) => {
   const {room} = props;
+
   const [newMessage,setNewMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
-  const messagesRef = collection(db, 'messages');
+  const [userList, setUserList] = useState();
 
+  const messagesRef = collection(db, 'messages');
+  const usersRef = collection(db, 'roomUsers');
+
+  let hasRan = false;
   useEffect(() => {
     const queryMessages = query(messagesRef, where('room', '==', room), orderBy('createdAt'));
      const unsuscribe = onSnapshot(queryMessages, (snapshot) => {
@@ -21,7 +26,29 @@ export const Chat = (props) => {
       setMessages(messages);
     });
 
-    return () => unsuscribe();
+    const queryUsers = query(usersRef, where('room', '==', room), orderBy('createdAt'));
+    const userLoad = onSnapshot(queryUsers, (snapshot) => {
+      let users = [];
+      snapshot.forEach((doc) => {
+        users.push({...doc.data(), id: doc.id });
+      });
+      users.reverse();
+      setUserList(users);
+    });
+
+    const asyncFunc = async() => {
+      await addDoc(usersRef, {
+        room,
+        users: `Anonymous(${auth.currentUser.uid.slice(0,4)})`,
+        createdAt: serverTimestamp(),
+      });
+    }
+    if(!hasRan)
+      asyncFunc();
+
+    hasRan = true;
+
+    return () => unsuscribe(), userLoad();
   }, []);
 
   const handleSubmit = async(e) => {
@@ -37,6 +64,20 @@ export const Chat = (props) => {
 
     setNewMessage("");
   };
+
+  window.onbeforeunload = async function() {
+    const queryUsers = query(collection(db, 'roomUsers'), where('users', '==', `Anonymous(${auth.currentUser.uid.slice(0,4)})`))
+
+    const docSnap = await getDocs(queryUsers);
+    docSnap.forEach((doc) => {
+      console.log(doc.data())
+      deleteDoc(doc.ref);
+    });
+
+    console.log('closing');
+
+    return ;
+  }
 
   return (
     <div className="chat-app">
@@ -73,8 +114,11 @@ export const Chat = (props) => {
           <p className="user-wel-p">Users in this chat:</p>
         </div>
         <div className="user-names">
-          <div>Husein L</div>
-          <div>sassssssssssssssss</div>
+          {/* {userList.map((user) =>(
+            <div className="user-name-elem" key={user.id}>
+              <span className="user-name">{user.user} </span>
+            </div>
+          ))} */}
         </div>
       </div>
     </div>
