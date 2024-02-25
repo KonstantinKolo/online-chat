@@ -74,13 +74,12 @@ export const Chat = (props) => {
     setNewMessage("");
   };
 
-  window.onbeforeunload = async function(event) {
+  window.onbeforeunload = async function() {
     await deleteUser();
-    windowClosed = true;
     
     console.log('closing');
 
-    return;
+    return '';
   }
   const deleteUser = async() => {
     const queryUsers = query(collection(db, 'roomUsers'), where('users', '==', `Anonymous(${auth.currentUser.uid.slice(0,4)})`));
@@ -90,6 +89,7 @@ export const Chat = (props) => {
       console.log(doc.data());
       deleteDoc(doc.ref);
     });
+    windowClosed = true;
   }
 
   useEffect(() => {
