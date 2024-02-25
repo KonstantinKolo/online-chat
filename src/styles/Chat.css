@@ -57,7 +57,7 @@
   display: grid;
   grid-template-columns: 68% 20px auto;
   grid-template-rows: 60% 20px auto;
-  height: 92%;
+  height: 99%;
   border-bottom: 2px solid #000000 ;
 }
 
@@ -144,10 +144,10 @@
   font-family: 'silkscreen';
 }
 .send-button {
-  border: none;
+  border: 3px outset #3d3b39;
   outline: none;
-  background: #3b5998;
-  color: #fff;
+  background: #b0b0b8;
+  color: #68605c;
   font-size: 20px;
   font-family: 'silkscreen';
   font-weight: bold;
@@ -208,4 +208,18 @@
 }
 .user-names * {
   margin-bottom: 6px;
+}
+
+.leave-room{
+  cursor: pointer;
+  position: absolute;
+  top: 1px;
+  left: 160px;
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
+  color: #000000;
+  background-color: #b0b0b8;
+  border-radius: 3px;
+  font-family: 'silkscreen';
 }

@@ -56,17 +56,15 @@ body{
 .sign-out{
   
 }
-.sign-out-button{
+.sign-out-div{
   cursor: pointer;
   position: absolute;
-  bottom: 5px;
-  right: 5px;
-  width: 200px;
-  font-size: 20px;
+  top: 1px;
+  left: 20px;
+  font-size: 15px;
   font-weight: bold;
-  height: 40px;
+  font-family: 'silkscreen';
   text-align: center;
-  background-color: #fef6d0;
-  border: 3px solid #622623;
+  color: #000000;
   border-radius: 3px;
 }

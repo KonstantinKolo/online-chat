@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { addDoc, collection, serverTimestamp, onSnapshot, query, where, orderBy, deleteDoc, doc, getDoc, getDocs} from 'firebase/firestore'
 import { auth, db } from "../firebase-config";
 import '../styles/Chat.css';
+import { setRoomExp } from "../App";
 
 let windowClosed = false;
 
@@ -76,6 +77,7 @@ export const Chat = (props) => {
 
   window.onbeforeunload = async function() {
     await deleteUser();
+    windowClosed = true;
     
     console.log('closing');
 
@@ -89,7 +91,6 @@ export const Chat = (props) => {
       console.log(doc.data());
       deleteDoc(doc.ref);
     });
-    windowClosed = true;
   }
 
   useEffect(() => {
@@ -114,6 +115,12 @@ export const Chat = (props) => {
     // Clean up the interval when the component is unmounted or when the dependencies change
     return () => clearInterval(intervalId);
   }, []); // Empty dependency array ensures that the effect runs only once on mount
+
+  const leaveRoom = async() => {
+    await deleteUser();
+
+    setRoomExp(null);
+  }
 
   return (
     <div className="chat-app">
@@ -157,6 +164,11 @@ export const Chat = (props) => {
           ))}
         </div>
       </div>
+
+      <div
+      className='leave-room'
+      onClick={leaveRoom}
+      >Leave Room</div>
     </div>
   );
 }

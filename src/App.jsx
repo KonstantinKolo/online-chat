@@ -11,9 +11,12 @@ import { auth, db } from './firebase-config'
 
 const cookies = new Cookies();
 
+export let setRoomExp;
+
 function App() {
   const [isAuth, setIsAuth] = useState(cookies.get("auth-token"));
   const [room, setRoom] = useState(null);
+  setRoomExp = setRoom;
 
   const roomInputRef = useRef(null);
 
@@ -45,7 +48,7 @@ function App() {
       )}
 
       <div className='sign-out'>
-        <button className='sign-out-button' onClick={signUserOut}> Sign Out </button>
+        <div className='sign-out-div' onClick={signUserOut}> Sign Out </div>
       </div>
     </>
   );
