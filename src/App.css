@@ -30,6 +30,17 @@ body{
   padding-top: 20px;
   background-color: #7070fc;
 }
+.click-icon{
+  height: 120px;
+  width: 120px;
+  position: absolute;
+  top:30%;
+  left: 0; 
+  right: 0; 
+  margin-left: auto; 
+  margin-right: auto;
+  cursor: pointer;
+}
 .room-window * {
   margin-top: 2%;
   margin-bottom: 3%;

@@ -11,12 +11,14 @@ import { auth, db } from './firebase-config'
 
 import smilyFace from '../public/smily-face.png'
 import closeWindow from '../public/close-window.png'
+import iconComp from '../public/iconComp.png'
 
 const cookies = new Cookies();
 
 export let setRoomExp;
 
 function App() {
+  const [visible, setVisible] = useState(false);
   const [isAuth, setIsAuth] = useState(cookies.get("auth-token"));
   const [room, setRoom] = useState(null);
   setRoomExp = setRoom;
@@ -40,24 +42,33 @@ function App() {
 
   return(
     <> 
-      {room ? (
+      {room ? ( 
       <Chat room={room}/> 
       ) : ( 
-      <div className='room'>
-        <div className='room-window'>
-          <div className='window-top-line'>
-            <img className='window-emoji' src={smilyFace}></img>
-            <div className='window-top-line-text'>Chatter</div>
-            <div 
-            style={{ backgroundImage: `url(${closeWindow})` }}
-            className='window-close'></div>
-          </div>
+        <div className='room'>
+          {visible ? (
+          <div className='room-window'>
+            <div className='window-top-line'>
+              <img className='window-emoji' src={smilyFace}></img>
+              <div className='window-top-line-text'>Chatter</div>
+              <div 
+              onClick={() => setVisible(false)}
+              style={{ backgroundImage: `url(${closeWindow})` }}
+              className='window-close'></div>
+            </div>
 
-          <label className='enter-text'>Enter Room Name:</label>
-          <input className='enter-input' ref={roomInputRef} />
-          <button className='enter-button' onClick={()=> setRoom(roomInputRef.current.value)}> Enter Chat</button>
-        </div>
-      </div> 
+            <label className='enter-text'>Enter Room Name:</label>
+            <input className='enter-input' ref={roomInputRef} />
+            <button className='enter-button' onClick={()=> setRoom(roomInputRef.current.value)}> Enter Chat</button>
+          </div>
+          ) : (
+            <div
+            className='click-icon'
+            style={{backgroundImage: `url(${iconComp})` }}
+            onClick={() => setVisible(true)}
+            ></div>
+          )}
+        </div> 
       )}
 
       <div className='sign-out'>
