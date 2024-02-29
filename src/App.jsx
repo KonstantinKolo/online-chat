@@ -58,7 +58,13 @@ function App() {
             </div>
 
             <label className='enter-text'>Enter Room Name:</label>
-            <input className='enter-input' ref={roomInputRef} />
+            <input className='enter-input' ref={roomInputRef} placeholder='enter custom room:'/>
+            <select className='room-list' placeholder='Popular rooms' onChange={(e) => setRoom(e.target.value.toUpperCase())}>
+              <option disabled selected hidden>Popular rooms:</option>
+              <option value={'random'}>random</option>
+              <option value={'chat'}>chat✨</option>
+              <option value={'skibiditoiler'}>skibiditoilet🚽</option>
+            </select>
             <button className='enter-button' onClick={()=> setRoom(roomInputRef.current.value.toUpperCase())}> Enter Chat</button>
           </div>
           ) : (

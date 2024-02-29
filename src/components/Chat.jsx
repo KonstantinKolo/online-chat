@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { addDoc, collection, serverTimestamp, onSnapshot, query, where, orderBy, deleteDoc, doc, getDoc, getDocs } from 'firebase/firestore'
+import { addDoc, collection, serverTimestamp, onSnapshot, query, where, orderBy, deleteDoc, doc, getDoc, getDocs, FieldValue } from 'firebase/firestore'
 import { auth, db } from "../firebase-config";
 import '../styles/Chat.css';
 import { setRoomExp } from "../App";
@@ -36,7 +36,9 @@ export const Chat = (props) => {
      const unsuscribe = onSnapshot(queryMessages, (snapshot) => {
       let messages = [];
       snapshot.forEach((doc) => {
-        // console.log(messages)
+        // const docHours = new Date(doc.data().createdAt.seconds * 1000);
+        // const currTime = new Date().toLocaleDateString();
+        // console.log(currTime)
         messages.push({...doc.data(), id: doc.id });
       });
       messages.reverse();
@@ -123,18 +125,6 @@ export const Chat = (props) => {
     setRoomExp(null);
   }
 
-  const sleep = ms => new Promise(r => setTimeout(r, ms));
-  const convertTime = async(mes) => {
-    await sleep(2000);
-    let time = mes.createdAt.toDate().toLocaleTimeString();
-    console.log(time)
-    // return time;
-  }
-  const convertDate = (mes) => {
-    let date = mes.createdAt.toDate().toDateString();
-    return date;
-  }
-
   return (
     <div className="chat-app">
       <div className="message-display">
@@ -144,9 +134,12 @@ export const Chat = (props) => {
             <div className="message" key={message.id}>
               <div className="user-info">
                 <span className="user">{message.user + ':'} </span>
-                {message.createdAt ? new Date(message.createdAt.seconds * 1000).toLocaleDateString() : console.log('date not loaded')}
-                <div></div>
-                {message.createdAt ? new Date(message.createdAt.seconds * 1000).toLocaleTimeString() : console.log('time not loaded')}
+                {message.createdAt ? 
+                  <div className="time-text">{new Date(message.createdAt.seconds * 1000).toLocaleDateString()}</div> 
+                  : console.log('date not loaded')}
+                {message.createdAt ?
+                  <div className="time-text">{new Date(message.createdAt.seconds * 1000).toLocaleTimeString()}</div> 
+                  : console.log('time not loaded')}
               </div>
               <div className="text">{message.text}</div>
             </div>

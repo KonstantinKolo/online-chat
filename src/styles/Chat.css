@@ -96,8 +96,8 @@
 .message {
   display: grid;
   grid-template-areas: "user-info text";
-  grid-template-columns: 170px calc(100% - 170px); /* 'auto' for user-info width and '1fr' for text to take remaining space */
-  grid-template-rows: auto auto;
+  grid-template-columns: 170px calc(100% - 170px);
+  grid-template-rows: auto;
   align-items: flex-start;
   margin-bottom: 8px;
   font-family: 'silkscreen';
@@ -105,6 +105,9 @@
 }
 .user-info {
   grid-area: user-info; /* Placing user-info div in its designated area */
+}
+.time-text{
+  font-size: 12px;
 }
 .text {
   grid-area: text; /* Placing text div in its designated area */
