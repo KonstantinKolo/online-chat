@@ -9,9 +9,9 @@ import { addDoc, collection, deleteDoc, doc } from 'firebase/firestore'
 import { signOut } from 'firebase/auth';
 import { auth, db } from './firebase-config'
 
-import smilyFace from '../public/smily-face.png'
-import closeWindow from '../public/close-window.png'
-import iconComp from '../public/iconComp.png'
+import smilyFace from '/smily-face.png'
+import closeWindow from '/close-window.png'
+import iconComp from '/iconComp.png'
 
 const cookies = new Cookies();
 
@@ -59,7 +59,7 @@ function App() {
 
             <label className='enter-text'>Enter Room Name:</label>
             <input className='enter-input' ref={roomInputRef} />
-            <button className='enter-button' onClick={()=> setRoom(roomInputRef.current.value)}> Enter Chat</button>
+            <button className='enter-button' onClick={()=> setRoom(roomInputRef.current.value.toUpperCase())}> Enter Chat</button>
           </div>
           ) : (
             <div

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { addDoc, collection, serverTimestamp, onSnapshot, query, where, orderBy, deleteDoc, doc, getDoc, getDocs} from 'firebase/firestore'
+import { addDoc, collection, serverTimestamp, onSnapshot, query, where, orderBy, deleteDoc, doc, getDoc, getDocs } from 'firebase/firestore'
 import { auth, db } from "../firebase-config";
 import '../styles/Chat.css';
 import { setRoomExp } from "../App";
@@ -53,6 +53,7 @@ export const Chat = (props) => {
         createdAt: serverTimestamp(),
       });
     }
+
     if(!hasRan)
       asyncFunc();
 
@@ -122,6 +123,18 @@ export const Chat = (props) => {
     setRoomExp(null);
   }
 
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  const convertTime = async(mes) => {
+    await sleep(2000);
+    let time = mes.createdAt.toDate().toLocaleTimeString();
+    console.log(time)
+    // return time;
+  }
+  const convertDate = (mes) => {
+    let date = mes.createdAt.toDate().toDateString();
+    return date;
+  }
+
   return (
     <div className="chat-app">
       <div className="message-display">
@@ -129,8 +142,13 @@ export const Chat = (props) => {
         <div className="messages"> 
           {messages.map((message) =>(
             <div className="message" key={message.id}>
-              <span className="user">{message.user + ':'} </span>
-              {message.text}
+              <div className="user-info">
+                <span className="user">{message.user + ':'} </span>
+                {message.createdAt ? new Date(message.createdAt.seconds * 1000).toLocaleDateString() : console.log('date not loaded')}
+                <div></div>
+                {message.createdAt ? new Date(message.createdAt.seconds * 1000).toLocaleTimeString() : console.log('time not loaded')}
+              </div>
+              <div className="text">{message.text}</div>
             </div>
           ))}
         </div>

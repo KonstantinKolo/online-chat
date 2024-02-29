@@ -94,12 +94,21 @@
   border-top: 2px solid #68605c;
 }
 .message {
-  display: block;
+  display: grid;
+  grid-template-areas: "user-info text";
+  grid-template-columns: 170px calc(100% - 170px); /* 'auto' for user-info width and '1fr' for text to take remaining space */
+  grid-template-rows: auto auto;
   align-items: flex-start;
   margin-bottom: 8px;
   font-family: 'silkscreen';
   width: 100%;
-  overflow-wrap: break-word;
+}
+.user-info {
+  grid-area: user-info; /* Placing user-info div in its designated area */
+}
+.text {
+  grid-area: text; /* Placing text div in its designated area */
+  word-wrap: break-word;
 }
 .user{
   /* font-weight: bold; */
@@ -107,6 +116,13 @@
   color: #68605c;
   font-family: 'silkscreen';
   font-size: 15px;
+}
+.message-time{
+  font-size: 10px;
+}
+.message-date{
+  font-size: 10px;
+
 }
 
 .message-write{
