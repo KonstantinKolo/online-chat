@@ -78,13 +78,13 @@ export const Chat = (props) => {
     setNewMessage("");
   };
 
-  window.onbeforeunload = async function() {
+  window.onbeforeunload = async function(e) {
     await deleteUser();
     windowClosed = true;
     
     console.log('closing');
 
-    return '';
+    return 'You have unsaved changes.';
   }
   const deleteUser = async() => {
     const queryUsers = query(collection(db, 'roomUsers'), where('users', '==', `Anonymous(${auth.currentUser.uid.slice(0,4)})`));
@@ -118,6 +118,22 @@ export const Chat = (props) => {
     // Clean up the interval when the component is unmounted or when the dependencies change
     return () => clearInterval(intervalId);
   }, []); // Empty dependency array ensures that the effect runs only once on mount
+
+  useEffect(() => {
+    const longerPeriodicFunction = async() => {
+      const queryUsers = query(collection(db, 'roomUsers'));
+      const docSnap = await getDocs(queryUsers);
+      const currentHour = new Date().getHours()
+      docSnap.forEach((doc) => {
+        const msgHour = new Date(doc.data().createdAt.seconds * 1000).getHours();
+        if(msgHour !== currentHour - 1 && msgHour !== currentHour) {
+          deleteDoc(doc.ref);
+        }
+      });
+    }
+    const intervalId = setInterval(longerPeriodicFunction, 60000);
+    return () => clearInterval(intervalId);
+  }, [])
 
   const leaveRoom = async() => {
     await deleteUser();

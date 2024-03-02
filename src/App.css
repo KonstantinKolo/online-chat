@@ -22,6 +22,22 @@ body{
   width: 100%;
 }
 
+.auth{
+  position: absolute;
+    top: 50%;  
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+}
+.auth button {
+  color: red;
+}
+.signin-page{
+  background-color: #7070fc;
+  height: 100%;
+  width: 100%;
+}
+
 .room {
   position: relative;
   width: calc(100% - 10px);

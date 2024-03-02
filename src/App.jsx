@@ -5,7 +5,7 @@ import { Auth } from './components/Auth'
 import Cookies from 'universal-cookie'
 import { Chat } from './components/Chat';
 
-import { addDoc, collection, deleteDoc, doc } from 'firebase/firestore'
+import { addDoc, query, where, getDocs, collection, deleteDoc, doc } from 'firebase/firestore'
 import { signOut } from 'firebase/auth';
 import { auth, db } from './firebase-config'
 
@@ -26,15 +26,27 @@ function App() {
   const roomInputRef = useRef(null);
 
   const signUserOut = async() => {
+    if(room)
+      await deleteUser();
     await signOut(auth);
+    console.log('closing');
     cookies.remove('auth-token');
     setIsAuth(false);
     setRoom(null);
   }
+  const deleteUser = async() => {
+    const queryUsers = query(collection(db, 'roomUsers'), where('users', '==', `Anonymous(${auth.currentUser.uid.slice(0,4)})`));
+    console.log(queryUsers);
+    const docSnap = await getDocs(queryUsers);
+    docSnap.forEach((doc) => {
+      console.log(doc.data());
+      deleteDoc(doc.ref);
+    });
+  }
 
   if(!isAuth){
     return (
-      <div>
+      <div className='signin-page'>
         <Auth setIsAuth={setIsAuth}/>
       </div>
     )
