@@ -125,8 +125,8 @@ export const Chat = (props) => {
       const docSnap = await getDocs(queryUsers);
       const currentHour = new Date().getHours()
       docSnap.forEach((doc) => {
-        const msgHour = new Date(doc.data().createdAt.seconds * 1000).getHours();
-        if(msgHour !== currentHour - 1 && msgHour !== currentHour) {
+        const creationHour = new Date(doc.data().createdAt.seconds * 1000).getHours();
+        if(creationHour !== currentHour - 1 && msgHour !== currentHour) {
           deleteDoc(doc.ref);
         }
       });

@@ -24,13 +24,32 @@ body{
 
 .auth{
   position: absolute;
-    top: 50%;  
-    left: 50%;
-
-    transform: translate(-50%, -50%);
+  top: 50%;  
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #b0b0b8;
+  width: 80%;
+  height: 300px;
+  border: 3px outset #000000;
+  text-align: center;
+}
+.auth * {
+  font-family: 'silkscreen';
 }
 .auth button {
-  color: red;
+  margin-top: calc(110px);
+  font-size: 25px;
+  border: 2px outset #000000;
+  cursor: pointer;
+}
+.auth p {
+  margin: 0;
+  background-color: #208800;
+  color: #fcfcfc;
+  text-align: center;
+  height: 40px;
+  font-size: 27px;
+  border-bottom: 1px solid #000000;
 }
 .signin-page{
   background-color: #7070fc;

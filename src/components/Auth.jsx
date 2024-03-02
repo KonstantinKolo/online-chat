@@ -10,7 +10,6 @@ export const Auth = (props) => {
   const signInAsGuest = async() => {
     await signInAnonymously(auth)
     .then(() => {
-      alert('signed in');
       setIsAuth(true);
     })
     .catch((error) => {
