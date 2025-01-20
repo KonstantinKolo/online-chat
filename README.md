@@ -1,4 +1,4 @@
-A simple, vintage looking chat app. I'll use it for later projects. Also its a project I did as a task for a school organised company project.
+A simple, vintage looking chatting website. I'll use it for later projects. Also its a project I did as a task for a school organised company project.
 
 https://win95chat.netlify.app/ 
 ⬆️ May not work in the future. The servers are down but the visuals of the site are accessible.
